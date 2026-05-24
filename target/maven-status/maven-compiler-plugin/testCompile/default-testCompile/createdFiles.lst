@@ -1,0 +1,11 @@
+com\example\finance\controller\GoalControllerTest.class
+com\example\finance\service\TransactionServiceTest.class
+com\example\finance\service\CategoryServiceIntegrationTest.class
+com\example\finance\service\CategoryServiceTest.class
+com\example\finance\service\GoalServiceTest.class
+com\example\finance\controller\AuthControllerTest.class
+com\example\finance\controller\TransactionControllerTest.class
+com\example\finance\service\UserServiceTest.class
+com\example\finance\security\CustomUserDetailsServiceTest.class
+com\example\finance\exception\GlobalExceptionHandlerTest.class
+com\example\finance\controller\CategoryControllerTest.class

@@ -1,0 +1,19 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+Personal Finance Manager,com.example.finance.controller,GoalController,69,9,10,0,9,4,7,1,2,1
+Personal Finance Manager,com.example.finance.controller,TransactionController,181,15,28,0,29,6,18,1,4,1
+Personal Finance Manager,com.example.finance.controller,AuthController,49,12,2,0,11,5,4,1,3,1
+Personal Finance Manager,com.example.finance.controller,CategoryController,102,9,6,0,15,4,7,1,4,1
+Personal Finance Manager,com.example.finance.security,CustomUserDetailsService,26,6,0,0,4,3,2,1,2,1
+Personal Finance Manager,com.example.finance,PersonalFinanceManagerApplication,5,3,0,0,2,1,1,1,1,1
+Personal Finance Manager,com.example.finance.exception,GlobalExceptionHandler,15,3,0,0,3,1,1,1,1,1
+Personal Finance Manager,com.example.finance.config,SecurityConfig,0,80,0,0,0,13,0,11,0,11
+Personal Finance Manager,com.example.finance.config,DataLoader,0,74,1,3,0,14,1,3,0,2
+Personal Finance Manager,com.example.finance.service,GoalService,11,6,0,0,2,3,2,1,2,1
+Personal Finance Manager,com.example.finance.service,UserService,13,9,0,0,2,4,1,1,1,1
+Personal Finance Manager,com.example.finance.service,TransactionService,18,6,0,0,3,3,3,1,3,1
+Personal Finance Manager,com.example.finance.service,CategoryService,15,60,1,5,2,15,3,5,2,3
+Personal Finance Manager,com.example.finance.model,Category,10,31,0,0,4,13,3,8,3,8
+Personal Finance Manager,com.example.finance.model,User,23,15,0,0,7,4,7,4,7,4
+Personal Finance Manager,com.example.finance.model,CategoryType,0,15,0,0,0,2,0,1,0,1
+Personal Finance Manager,com.example.finance.model,Goal,42,3,0,0,12,1,12,1,12,1
+Personal Finance Manager,com.example.finance.model,Transaction,33,22,0,0,10,6,10,5,10,5

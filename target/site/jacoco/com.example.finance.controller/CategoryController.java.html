@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Personal Finance Manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.controller</a> &gt; <span class="el_source">CategoryController.java</span></div><h1>CategoryController.java</h1><pre class="source lang-java linenums">package com.example.finance.controller;
+
+import com.example.finance.model.Category;
+import com.example.finance.model.User;
+import com.example.finance.repository.UserRepository;
+import com.example.finance.security.CustomUserDetailsService;
+import com.example.finance.service.CategoryService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/api/categories&quot;)
+public class CategoryController {
+    private final CategoryService categoryService;
+    private final UserRepository userRepository;
+
+<span class="fc" id="L21">    public CategoryController(CategoryService categoryService, UserRepository userRepository) {</span>
+<span class="fc" id="L22">        this.categoryService = categoryService;</span>
+<span class="fc" id="L23">        this.userRepository = userRepository;</span>
+<span class="fc" id="L24">    }</span>
+
+    @GetMapping
+    public ResponseEntity&lt;?&gt; getAll(Principal principal) {
+<span class="nc" id="L28">        User user = userRepository.findByUsername(principal.getName()).orElse(null);</span>
+<span class="nc" id="L29">        List&lt;Category&gt; list = categoryService.getAllForUser(user);</span>
+<span class="nc" id="L30">        return ResponseEntity.ok().body(list);</span>
+    }
+
+    @PostMapping
+    public ResponseEntity&lt;?&gt; create(@RequestBody Category category, Principal principal) {
+<span class="nc" id="L35">        User user = userRepository.findByUsername(principal.getName()).orElse(null);</span>
+<span class="nc" id="L36">        Category saved = categoryService.createCustom(category, user);</span>
+<span class="nc" id="L37">        return ResponseEntity.status(201).body(saved);</span>
+    }
+
+    @DeleteMapping(&quot;/{id}&quot;)
+    public ResponseEntity&lt;?&gt; delete(@PathVariable Long id, Principal principal) {
+<span class="nc" id="L42">        User user = userRepository.findByUsername(principal.getName()).orElse(null);</span>
+<span class="nc" id="L43">        Category cat = categoryService.getAllForUser(user).stream().filter(c -&gt; c.getId().equals(id)).findFirst().orElse(null);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">        if (cat == null) return ResponseEntity.status(404).body(&quot;Category not found&quot;);</span>
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if (cat.getUser() == null || !cat.getUser().getUsername().equals(user.getUsername())) {</span>
+<span class="nc" id="L46">            return ResponseEntity.status(403).body(&quot;Forbidden&quot;);</span>
+        }
+        try {
+<span class="nc" id="L49">            categoryService.deleteCategory(id);</span>
+<span class="nc" id="L50">            return ResponseEntity.ok().body(&quot;Category deleted successfully&quot;);</span>
+<span class="nc" id="L51">        } catch (IllegalStateException ex) {</span>
+<span class="nc" id="L52">            return ResponseEntity.status(400).body(ex.getMessage());</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

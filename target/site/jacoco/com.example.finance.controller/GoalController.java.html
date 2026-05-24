@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GoalController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Personal Finance Manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.controller</a> &gt; <span class="el_source">GoalController.java</span></div><h1>GoalController.java</h1><pre class="source lang-java linenums">package com.example.finance.controller;
+
+import com.example.finance.model.Goal;
+import com.example.finance.model.User;
+import com.example.finance.repository.UserRepository;
+import com.example.finance.service.GoalService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.time.LocalDate;
+
+@RestController
+@RequestMapping(&quot;/api/goals&quot;)
+public class GoalController {
+    private final GoalService goalService;
+    private final UserRepository userRepository;
+
+<span class="fc" id="L19">    public GoalController(GoalService goalService, UserRepository userRepository) {</span>
+<span class="fc" id="L20">        this.goalService = goalService;</span>
+<span class="fc" id="L21">        this.userRepository = userRepository;</span>
+<span class="fc" id="L22">    }</span>
+
+    @PostMapping
+    public ResponseEntity&lt;?&gt; create(@RequestBody Goal goal, Principal principal) {
+<span class="nc bnc" id="L26" title="All 4 branches missed.">        if (goal.getTargetAmount() == null || goal.getTargetAmount().doubleValue() &lt;= 0) return ResponseEntity.badRequest().body(&quot;Invalid amount&quot;);</span>
+<span class="nc bnc" id="L27" title="All 4 branches missed.">        if (goal.getTargetDate() == null || !goal.getTargetDate().isAfter(LocalDate.now())) return ResponseEntity.badRequest().body(&quot;Target date must be future&quot;);</span>
+<span class="nc" id="L28">        User user = userRepository.findByUsername(principal.getName()).orElse(null);</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (goal.getStartDate() == null) goal.setStartDate(LocalDate.now());</span>
+<span class="nc" id="L30">        goal.setUser(user);</span>
+<span class="nc" id="L31">        Goal saved = goalService.create(goal);</span>
+<span class="nc" id="L32">        return ResponseEntity.status(201).body(saved);</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;?&gt; getAll(Principal principal) {
+<span class="nc" id="L37">        User user = userRepository.findByUsername(principal.getName()).orElse(null);</span>
+<span class="nc" id="L38">        return ResponseEntity.ok().body(goalService.getByUser(user));</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

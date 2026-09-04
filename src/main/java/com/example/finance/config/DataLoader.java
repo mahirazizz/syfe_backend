@@ -19,24 +19,21 @@ public class DataLoader {
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
-        // create default categories if not present
-        if (categoryRepository.count() == 0) {
-            Category c = new Category();
-            c.setName("Salary");
-            c.setType(CategoryType.INCOME);
-            c.setCustom(false);
-            c.setUser(null);
-            categoryRepository.save(c);
-            List<String> expenses = List.of("Food", "Rent", "Transportation", "Entertainment", "Healthcare",
-                    "Utilities");
-            for (String name : expenses) {
-                Category e = new Category();
-                e.setName(name);
-                e.setType(CategoryType.EXPENSE);
-                e.setCustom(false);
-                e.setUser(null);
-                categoryRepository.save(e);
-            }
+        createDefaultCategory("Salary", CategoryType.INCOME);
+        List<String> expenses = List.of("Food", "Rent", "Transportation", "Entertainment", "Healthcare", "Utilities");
+        expenses.forEach(name -> createDefaultCategory(name, CategoryType.EXPENSE));
+    }
+
+    private void createDefaultCategory(String name, CategoryType type) {
+        if (categoryRepository.findByNameAndUserIsNull(name).isPresent()) {
+            return;
         }
+
+        Category category = new Category();
+        category.setName(name);
+        category.setType(type);
+        category.setCustom(false);
+        category.setUser(null);
+        categoryRepository.save(category);
     }
 }

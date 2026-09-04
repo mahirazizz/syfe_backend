@@ -23,10 +23,13 @@ public class GoalController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Goal goal, Principal principal) {
-        if (goal.getTargetAmount() == null || goal.getTargetAmount().doubleValue() <= 0) return ResponseEntity.badRequest().body("Invalid amount");
-        if (goal.getTargetDate() == null || !goal.getTargetDate().isAfter(LocalDate.now())) return ResponseEntity.badRequest().body("Target date must be future");
+        if (goal.getTargetAmount() == null || goal.getTargetAmount().doubleValue() <= 0)
+            return ResponseEntity.badRequest().body("Invalid amount");
+        if (goal.getTargetDate() == null || !goal.getTargetDate().isAfter(LocalDate.now()))
+            return ResponseEntity.badRequest().body("Target date must be future");
         User user = userRepository.findByUsername(principal.getName()).orElse(null);
-        if (goal.getStartDate() == null) goal.setStartDate(LocalDate.now());
+        if (goal.getStartDate() == null)
+            goal.setStartDate(LocalDate.now());
         goal.setUser(user);
         Goal saved = goalService.create(goal);
         return ResponseEntity.status(201).body(saved);

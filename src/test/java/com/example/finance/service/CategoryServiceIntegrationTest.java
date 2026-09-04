@@ -35,25 +35,38 @@ public class CategoryServiceIntegrationTest {
     @Test
     public void createDuplicateCategoryThrows() {
         User u = new User();
-        u.setUsername("tuser@example.com"); u.setPassword("pwd"); u.setFullName("T");
+        u.setUsername("tuser@example.com");
+        u.setPassword("pwd");
+        u.setFullName("T");
         userRepository.save(u);
 
         Category c = new Category();
-        c.setName("SideJob"); c.setType(CategoryType.INCOME);
+        c.setName("SideJob");
+        c.setType(CategoryType.INCOME);
         categoryService.createCustom(c, u);
 
-        Category dup = new Category(); dup.setName("SideJob"); dup.setType(CategoryType.INCOME);
+        Category dup = new Category();
+        dup.setName("SideJob");
+        dup.setType(CategoryType.INCOME);
         Assertions.assertThrows(IllegalArgumentException.class, () -> categoryService.createCustom(dup, u));
     }
 
     @Test
     public void deleteCategoryReferencedByTransactionThrows() {
-        User u = new User(); u.setUsername("u2@example.com"); u.setPassword("pwd"); userRepository.save(u);
-        Category c = new Category(); c.setName("G1"); c.setType(CategoryType.EXPENSE);
+        User u = new User();
+        u.setUsername("u2@example.com");
+        u.setPassword("pwd");
+        userRepository.save(u);
+        Category c = new Category();
+        c.setName("G1");
+        c.setType(CategoryType.EXPENSE);
         Category saved = categoryService.createCustom(c, u);
 
         Transaction t = new Transaction();
-        t.setAmount(new BigDecimal("100")); t.setDate(LocalDate.now()); t.setCategory(saved); t.setUser(u);
+        t.setAmount(new BigDecimal("100"));
+        t.setDate(LocalDate.now());
+        t.setCategory(saved);
+        t.setUser(u);
         transactionRepository.save(t);
 
         Assertions.assertThrows(IllegalStateException.class, () -> categoryService.deleteCategory(saved.getId()));
@@ -61,8 +74,13 @@ public class CategoryServiceIntegrationTest {
 
     @Test
     public void deleteUnusedCategorySucceeds() {
-        User u = new User(); u.setUsername("u3@example.com"); u.setPassword("pwd"); userRepository.save(u);
-        Category c = new Category(); c.setName("G2"); c.setType(CategoryType.EXPENSE);
+        User u = new User();
+        u.setUsername("u3@example.com");
+        u.setPassword("pwd");
+        userRepository.save(u);
+        Category c = new Category();
+        c.setName("G2");
+        c.setType(CategoryType.EXPENSE);
         Category saved = categoryService.createCustom(c, u);
 
         categoryService.deleteCategory(saved.getId());

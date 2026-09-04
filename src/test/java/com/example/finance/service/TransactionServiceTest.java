@@ -57,7 +57,8 @@ class TransactionServiceTest {
         LocalDate start = LocalDate.now().minusDays(7);
         LocalDate end = LocalDate.now();
         Transaction transaction = new Transaction();
-        when(transactionRepository.findByUserAndDateBetweenAndDeletedFalseOrderByDateDesc(user, start, end)).thenReturn(List.of(transaction));
+        when(transactionRepository.findByUserAndDateBetweenAndDeletedFalseOrderByDateDesc(user, start, end))
+                .thenReturn(List.of(transaction));
 
         List<Transaction> result = service.getBetween(user, start, end);
 

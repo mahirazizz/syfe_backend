@@ -132,7 +132,8 @@ class CategoryControllerTest {
         when(principal.getName()).thenReturn(user.getUsername());
         when(userRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
         when(categoryService.getAllForUser(user)).thenReturn(List.of(category));
-        org.mockito.Mockito.doThrow(new IllegalStateException("Category is referenced by transactions")).when(categoryService).deleteCategory(7L);
+        org.mockito.Mockito.doThrow(new IllegalStateException("Category is referenced by transactions"))
+                .when(categoryService).deleteCategory(7L);
 
         ResponseEntity<?> response = controller.delete(7L, principal);
 

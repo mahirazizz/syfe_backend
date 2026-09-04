@@ -40,8 +40,10 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, Principal principal) {
         User user = userRepository.findByUsername(principal.getName()).orElse(null);
-        Category cat = categoryService.getAllForUser(user).stream().filter(c -> c.getId().equals(id)).findFirst().orElse(null);
-        if (cat == null) return ResponseEntity.status(404).body("Category not found");
+        Category cat = categoryService.getAllForUser(user).stream().filter(c -> c.getId().equals(id)).findFirst()
+                .orElse(null);
+        if (cat == null)
+            return ResponseEntity.status(404).body("Category not found");
         if (cat.getUser() == null || !cat.getUser().getUsername().equals(user.getUsername())) {
             return ResponseEntity.status(403).body("Forbidden");
         }

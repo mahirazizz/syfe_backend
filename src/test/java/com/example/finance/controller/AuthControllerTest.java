@@ -75,7 +75,8 @@ class AuthControllerTest {
         User requestUser = new User();
         requestUser.setUsername("user@example.com");
         requestUser.setPassword("secret");
-        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class))).thenReturn(authentication);
+        when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                .thenReturn(authentication);
         when(request.getSession(true)).thenReturn(null);
 
         ResponseEntity<?> response = authController.login(requestUser, request);

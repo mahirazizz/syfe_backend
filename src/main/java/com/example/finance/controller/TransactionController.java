@@ -24,7 +24,8 @@ public class TransactionController {
     private final CategoryRepository categoryRepository;
     private final TransactionRepository transactionRepository;
 
-    public TransactionController(TransactionService transactionService, UserRepository userRepository, CategoryRepository categoryRepository, TransactionRepository transactionRepository) {
+    public TransactionController(TransactionService transactionService, UserRepository userRepository,
+            CategoryRepository categoryRepository, TransactionRepository transactionRepository) {
         this.transactionService = transactionService;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
@@ -41,7 +42,8 @@ public class TransactionController {
         }
         User user = userRepository.findByUsername(principal.getName()).orElse(null);
         Category cat = categoryRepository.findById(request.getCategory().getId()).orElse(null);
-        if (cat == null) return ResponseEntity.badRequest().body("Invalid category");
+        if (cat == null)
+            return ResponseEntity.badRequest().body("Invalid category");
         request.setCategory(cat);
         request.setUser(user);
         Transaction saved = transactionService.create(request);
@@ -49,9 +51,10 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<?> list(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-                                  @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-                                  Principal principal) {
+    public ResponseEntity<?> list(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Principal principal) {
         User user = userRepository.findByUsername(principal.getName()).orElse(null);
         List<Transaction> list;
         if (startDate != null && endDate != null) {
@@ -65,10 +68,14 @@ public class TransactionController {
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Transaction request, Principal principal) {
         Transaction tx = transactionRepository.findById(id).orElse(null);
-        if (tx == null || tx.isDeleted()) return ResponseEntity.notFound().build();
-        if (!tx.getUser().getUsername().equals(principal.getName())) return ResponseEntity.status(403).build();
-        if (request.getAmount() != null) tx.setAmount(request.getAmount());
-        if (request.getDescription() != null) tx.setDescription(request.getDescription());
+        if (tx == null || tx.isDeleted())
+            return ResponseEntity.notFound().build();
+        if (!tx.getUser().getUsername().equals(principal.getName()))
+            return ResponseEntity.status(403).build();
+        if (request.getAmount() != null)
+            tx.setAmount(request.getAmount());
+        if (request.getDescription() != null)
+            tx.setDescription(request.getDescription());
         // date not modifiable
         transactionRepository.save(tx);
         return ResponseEntity.ok().body(tx);
@@ -77,8 +84,10 @@ public class TransactionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id, Principal principal) {
         Transaction tx = transactionRepository.findById(id).orElse(null);
-        if (tx == null) return ResponseEntity.notFound().build();
-        if (!tx.getUser().getUsername().equals(principal.getName())) return ResponseEntity.status(403).build();
+        if (tx == null)
+            return ResponseEntity.notFound().build();
+        if (!tx.getUser().getUsername().equals(principal.getName()))
+            return ResponseEntity.status(403).build();
         tx.setDeleted(true);
         transactionRepository.save(tx);
         return ResponseEntity.ok().body("Transaction deleted successfully");

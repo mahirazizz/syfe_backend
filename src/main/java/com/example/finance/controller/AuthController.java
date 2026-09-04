@@ -20,7 +20,8 @@ public class AuthController {
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService, UserRepository userRepository, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, UserRepository userRepository,
+            AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
@@ -38,8 +39,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User request, HttpServletRequest httpRequest) {
         Authentication auth = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(auth);
         // ensure session is created so the session cookie is sent
         httpRequest.getSession(true);
